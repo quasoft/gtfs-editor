@@ -219,9 +219,9 @@
 /* ================================================================== */
 
 .leaflet-edit-marker-selected {
-	background-color: rgba(254, 87, 161, 0.1);
+	background-color: rgba(0, 255, 0, 0.1);
 	border-radius: 4px;
-	border: 4px dashed rgba(254, 87, 161, 0.6);
+	border: 4px dashed rgba(0, 255, 0, 0.6);
 }
 
 .leaflet-edit-move {

@@ -129,12 +129,12 @@ var GtfsEditor = GtfsEditor || {};
 
       var tileKey;
       if(G.session.useSatellite)
-        tileKey = G.config.mapboxSatelliteKey;
+        tileKey = G.config.mapboxServerSatellite;
       else
-        tileKey = G.config.mapboxKey;
+        tileKey = G.config.mapboxServer;
 
 
-      var url = 'http://{s}.tiles.mapbox.com/v3/' + tileKey + '/{z}/{x}/{y}.png',
+      var url = tileKey + '{z}/{x}/{y}.png',
 
           baseLayer = L.tileLayer(url, {
             attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
@@ -144,7 +144,7 @@ var GtfsEditor = GtfsEditor || {};
       this.map = L.map(this.$('#map').get(0), {
         center: G.session.mapCenter,
         zoom: G.session.mapZoom,
-        maxZoom: 17
+        maxZoom: 19
       });
       this.map.addLayer(baseLayer);
 
@@ -327,16 +327,21 @@ var GtfsEditor = GtfsEditor || {};
         return;
 
       var selectedPatternId  = this.$('#trip-pattern-select').val();
+if($('input[name="stopFilterRadio"]:checked').val() != 'none' )
+{
       if(this.model.tripPatterns.get(selectedPatternId) != undefined) {
         var patternStops = _.pluck(this.model.tripPatterns.get(selectedPatternId).attributes.patternStops, 'stop');
         this.options.stops.add(patternStops);
       }
+}
 
       // don't keep more than 500 markers on map at anytime.
        if(this.options.stops.length > 500)
           this.options.stops.remove(this.options.stops.slice(0, 200));
 
       var agencyId = null;
+      if($('input[name="stopFilterRadio"]:checked').val() != 'none' )
+{
        if($('input[name="stopFilterRadio"]:checked').val() != 'all' )
           agencyId = this.model.attributes.agency.id;
 
@@ -348,7 +353,7 @@ var GtfsEditor = GtfsEditor || {};
 
           this.options.stops
       }
-
+}
       this.updatePatternList();
 
       if(G.config.showMajorStops)
@@ -463,7 +468,7 @@ var GtfsEditor = GtfsEditor || {};
         });
 
       if(patternStopLabel) {
-        markerLayer.bindLabel(patternStopLabel, { noHide: true });
+        markerLayer.bindLabel(patternStopLabel, { noHide: false });
       }
       else {
         markerLayer.bindLabel(model.get('stopName'));
@@ -752,7 +757,7 @@ var GtfsEditor = GtfsEditor || {};
 
       this.drawnItems.clearLayers();
 
-      var polyline = L.polyline([], {color: 'red'}).addTo(this.drawnItems);
+      var polyline = L.polyline([], {color: 'lime'}).addTo(this.drawnItems);
 
       for(var s in data.stops) {
         var id = data.stops[s].stop.id
@@ -776,7 +781,7 @@ var GtfsEditor = GtfsEditor || {};
 
       this.drawnItems.clearLayers();
 
-      var polyline = L.polyline([], {color: 'red'}).addTo(this.drawnItems);
+      var polyline = L.polyline([], {color: 'lime'}).addTo(this.drawnItems);
 
       this.saveTripPatternLine();
 
@@ -827,7 +832,7 @@ var GtfsEditor = GtfsEditor || {};
 
       if(encodedShape != '' && encodedShape != null) {
 
-        var polyline =  new L.EncodedPolyline(encodedShape, {color: 'red'});
+        var polyline =  new L.EncodedPolyline(encodedShape, {color: 'lime'});
 
         polyline.addTo(this.drawnItems);
       }
@@ -1035,6 +1040,12 @@ var GtfsEditor = GtfsEditor || {};
 
           view.model.tripPatterns.fetch({data: {routeId: view.model.id}});
         });
+        /*
+        console.log("debug -1");
+       var tripPattern = this.model.tripPatterns.get(selectedPatternId);
+       tripPattern.calculateTimes(velocity, defaultDwell);
+       tripPattern.save();
+*/
       }
 
     },

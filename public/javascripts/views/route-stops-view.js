@@ -96,12 +96,12 @@ var GtfsEditor = GtfsEditor || {};
 
       var tileKey;
       if(G.session.useSatellite)
-        tileKey = G.config.mapboxSatelliteKey;
+        tileKey = G.config.mapboxServerSatellite;
       else
-        tileKey = G.config.mapboxKey;
+        tileKey = G.config.mapboxServer;
 
 
-      var url = 'http://{s}.tiles.mapbox.com/v3/' + tileKey + '/{z}/{x}/{y}.png',
+      var url = tileKey + '{z}/{x}/{y}.png',
           baseLayer = L.tileLayer(url, {
             attribution: '&copy; OpenStreetMap contributors, CC-BY-SA. <a href="http://mapbox.com/about/maps" target="_blank">Terms &amp; Feedback</a>'
           });
@@ -110,7 +110,7 @@ var GtfsEditor = GtfsEditor || {};
       this.map = L.map(this.$('#map').get(0), {
         center: G.session.mapCenter, //TODO: add to the config file for now
         zoom: G.session.mapZoom,
-        maxZoom: 17
+        maxZoom: 20
       });
       this.map.addLayer(baseLayer);
 
