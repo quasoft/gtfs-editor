@@ -10,3 +10,4 @@ eclipse
 .project
 test-result
 dropAndRecreateDatabase.sh
+/START.bat
